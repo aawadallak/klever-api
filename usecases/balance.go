@@ -1,6 +1,7 @@
 package usecases
 
 import (
+	"awesomeProject/domain"
 	"awesomeProject/dto"
 	"awesomeProject/utils"
 	"encoding/json"
@@ -11,7 +12,7 @@ import (
 	"net/http"
 )
 
-func GetBalance(adresss string) (*dto.Balance, error){
+func GetBalance(adresss string) (*domain.Balance, error){
 	url := fmt.Sprintf("https://blockbook-bitcoin.tronwallet.me/api/v2/utxo/%s", adresss)
 	req, err := utils.DoRequest(url, http.MethodGet, nil)
 	defer req.Body.Close()
@@ -47,8 +48,5 @@ func GetBalance(adresss string) (*dto.Balance, error){
 		unconfirmed.Add(&unconfirmed, val)
 	}
 
-	return &dto.Balance{
-		Confirmed:   confirmed.String(),
-		Unconfirmed: unconfirmed.String(),
-	}, nil
+	return  domain.NewBalance(confirmed.String(), unconfirmed.String()), nil
 }

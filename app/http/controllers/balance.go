@@ -8,10 +8,11 @@ import (
 func GetBalance(c *gin.Context){
 	address := c.Param("address")
 
-
 	v, err := usecases.GetBalance(address)
 	if err != nil {
-		 c.JSON(400, err)
+		c.JSON(400, gin.H{
+			"error": err.Error(),
+		})
 		return
 	}
 
